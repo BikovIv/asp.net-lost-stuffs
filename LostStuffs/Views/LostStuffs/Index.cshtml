@@ -1,0 +1,103 @@
+﻿@model IEnumerable<LostStuffs.Entities.LostStuff>
+
+@{
+    ViewBag.Title = "Lost stuffs";
+    var lastPosted = (List<LostStuffs.Entities.LostStuff>)ViewData["MyData"]; // Cast the list
+}
+
+
+<h2>Lost stuffs</h2>
+
+<div class="pull-right" style=" margin-right:-4%; background-color:#f99393;width: 14em;">
+    <h3>Latest posts</h3>
+
+    @foreach (var item in lastPosted)
+    {
+
+        <div class="container body-content" style="border:1px solid black;margin-bottom:3%">
+
+
+            @Html.DisplayFor(modelItem => item.Name)<br>
+
+            <img src="@Url.Content(item.ImagePath)" width="100" height="100" style=" position:relative;margin-bottom:13%;border:1px solid black;margin-left:13%" />
+
+
+            <br />
+            <div class="table-bordered" style="border-top:1px solid black;border-bottom:1px solid black; background-color:aquamarine">
+                @item.Description <br />
+            </div>
+            @item.Price<br />
+
+            <p>Published at:</p>
+            @item.CreatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+            <p>Updated at:</p>
+            @item.UpdatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+
+
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </div>
+    }
+
+</div>
+
+<a href="/LostStuffs/Create" class="btn btn-info">Create new</a><br />
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color" style="margin-left: 30%;padding-bottom: 2%;">
+
+        Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+        <input type="submit" value="Search" class="btn btn-default" /> |
+        <a> @Html.ActionLink("Back to full list", "Index") </a>
+
+    </div>
+</form>
+
+
+
+
+<tr>
+    @foreach (var item in Model)
+            {
+        <td>
+            <div class="container body-content" style="float:left;border:1px solid black;margin-right:10%; width:18%">
+
+                <h2 class="text-center">@item.Name</h2>
+
+                <img src="@Url.Content(item.ImagePath)" width="100" height="100" style=" position:relative;margin-bottom:13%;border:1px solid black;margin-left:13%" />
+
+
+                <br />
+                <label>Description:</label>
+                <div class="table-bordered" style="border-top:1px solid black;border-bottom:1px solid black; background-color:aquamarine">
+                    @item.Description <br />
+                </div>
+                @item.Price<br />
+
+                <label>Published at:</label>
+                @item.CreatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+                <label>Updated at:</label>
+                @item.UpdatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+
+
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                
+            </div>
+        </td>
+    }
+</tr>
+
+
+
+
+
+
+
+
+
+
+

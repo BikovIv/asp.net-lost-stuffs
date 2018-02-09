@@ -1,0 +1,35 @@
+﻿@model IEnumerable<LostStuffs.Entities.LostStuff>
+@{
+    ViewBag.Title = "GetLastsPosts";
+}
+
+<h2>GetLastsPosts</h2>
+
+@foreach (var item in Model)
+{
+
+    <div class="container body-content" style="float:left;border:1px solid black;margin-right:10%;">
+
+
+        @Html.DisplayFor(modelItem => item.Name)<br>
+
+        <img src="@Url.Content(item.ImagePath)" width="100" height="100" style=" position:relative;margin-bottom:13%;border:1px solid black;margin-left:13%" />
+
+
+        <br />
+        <div class="table-bordered" style="border-top:1px solid black;border-bottom:1px solid black; background-color:aquamarine">
+            @item.Description <br />
+        </div>
+        @item.Price<br />
+
+        <p>Published at:</p>
+        @item.CreatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+        <p>Updated at:</p>
+        @item.UpdatedAt.ToString("dd/MMM/yyyy hh:mm")<br />
+
+
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </div>
+}

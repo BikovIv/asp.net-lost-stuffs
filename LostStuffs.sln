@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostStuffs", "LostStuffs\LostStuffs.csproj", "{4F2F4FE1-F490-4C8B-A70B-99FC0B80EED5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F2F4FE1-F490-4C8B-A70B-99FC0B80EED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F2F4FE1-F490-4C8B-A70B-99FC0B80EED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F2F4FE1-F490-4C8B-A70B-99FC0B80EED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F2F4FE1-F490-4C8B-A70B-99FC0B80EED5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C047D86-211E-4546-8FA4-B6751225B771}
+	EndGlobalSection
+EndGlobal
