@@ -36,7 +36,9 @@
 
             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
             @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+            <a href="/Comment/Index/@item.Id" class="btn btn-info">Comments</a>
+
         </div>
     }
 
@@ -84,7 +86,8 @@
 
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) 
+                <a href="/Comments/Index/@item.Id" class="btn btn-info">Comments</a>
                 
             </div>
         </td>

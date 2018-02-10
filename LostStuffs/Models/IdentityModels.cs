@@ -31,5 +31,7 @@ namespace LostStuffs.Models
         }
 
         public System.Data.Entity.DbSet<LostStuffs.Entities.LostStuff> LostStuffs { get; set; }
+
+        public System.Data.Entity.DbSet<LostStuffs.Entities.Comment> Comments { get; set; }
     }
 }
