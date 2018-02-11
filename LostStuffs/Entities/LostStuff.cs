@@ -24,6 +24,7 @@ namespace LostStuffs.Entities
        // [Required]
         //[StringLength(10 , ErrorMessage = "The phone number must be 10 characters long.")]
         public string  PhoneNumber { get; set; }
+        public string UserId { get; set; }
 
         public virtual List<Comment> Comments { get; set; }
     }

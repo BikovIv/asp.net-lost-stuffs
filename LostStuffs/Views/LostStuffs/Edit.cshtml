@@ -73,8 +73,10 @@
         {
             @Html.AntiForgeryToken()
 
-            @Html.ActionLink("Delete", "DeleteImage", "LostStuffs", new { fileName = imageName, id = Model.Id }, null)
-            @Html.ActionLink("Set main image", "ChangeMainImage", "LostStuffs", new { imageName = imageName, id = Model.Id }, null)
+            <p>
+                @Html.ActionLink("Delete", "DeleteImage", "LostStuffs", new { fileName = imageName, id = Model.Id }, null)<br />
+                @Html.ActionLink("Set main image", "ChangeMainImage", "LostStuffs", new { imageName = imageName, id = Model.Id }, null)
+            </p>
 
         }
     }

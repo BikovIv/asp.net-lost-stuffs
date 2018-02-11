@@ -8,19 +8,30 @@ using System.Web;
 using System.Web.Mvc;
 using LostStuffs.Entities;
 using LostStuffs.Models;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace LostStuffs.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
         // GET: Comments
+        [AllowAnonymous]
         public ActionResult Index(int id)
         {
             ViewBag.ID = id;
             var comments = db.Comments.Where(x => x.LostStuffId == id).ToList();
-            //var comments = db.Comments.Include(c => c.LostStuff);
+
+
+            if (user != null)
+            {
+                ViewData["CurrentUserId"] = user.Id;
+            }
+
             return View(comments);
         }
 
@@ -36,7 +47,15 @@ namespace LostStuffs.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            if (user.Id == comment.UserId)
+            {
+                return View(comment);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
+        
         }
 
         [HttpGet]
@@ -47,7 +66,15 @@ namespace LostStuffs.Controllers
                 LostStuffId = id
             };
 
-            return View(entity);
+            if (user.Id == entity.UserId)
+            {
+
+                return View(entity);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
         }
 
         [HttpPost]
@@ -57,6 +84,7 @@ namespace LostStuffs.Controllers
             entity.UpdatedAt = DateTime.Now;
 
             entity.LostStuffId = id;
+            entity.UserId = user.Id;
 
             db.Comments.Add(entity);
             db.Entry(entity).State = EntityState.Added;
@@ -80,7 +108,15 @@ namespace LostStuffs.Controllers
                 return HttpNotFound();
             }
             ViewBag.LostStuffId = new SelectList(db.LostStuffs, "Id", "Name", comment.LostStuffId);
-            return View(comment);
+            if (user.Id == comment.UserId)
+            {
+                return View(comment);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
+
         }
 
         // POST: Comments/Edit/5
@@ -97,7 +133,14 @@ namespace LostStuffs.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.LostStuffId = new SelectList(db.LostStuffs, "Id", "Name", comment.LostStuffId);
-            return View(comment);
+            if (user.Id == comment.UserId)
+            {
+                return View(comment);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
         }
 
         // GET: Comments/Delete/5
@@ -112,7 +155,14 @@ namespace LostStuffs.Controllers
             {
                 return HttpNotFound();
             }
-            return View(comment);
+            if (user.Id == comment.UserId)
+            {
+                return View(comment);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
         }
 
         // POST: Comments/Delete/5
@@ -121,9 +171,16 @@ namespace LostStuffs.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (user.Id == comment.UserId)
+            {
+                db.Comments.Remove(comment);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -14,15 +14,21 @@ using System.Configuration;
 using System.Web.UI.WebControls;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
 namespace LostStuffs.Controllers
 {
+    [Authorize]
     public class LostStuffsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+
         List<LostStuff> lostStuffs = new List<LostStuff>();
         LostStuff lost = new LostStuff();
 
+        [AllowAnonymous]
         public async Task<ActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -55,6 +61,11 @@ namespace LostStuffs.Controllers
 
             var lastPosted = db.LostStuffs.OrderByDescending(x => x.CreatedAt).Take(4).ToList();
             ViewData["MyData"] = lastPosted; // Send this list to the view
+            if (user != null)
+            {
+                ViewData["CurrentUserId"] = user.Id;
+            }
+           
 
             return View(await items.OrderByDescending(x => x.CreatedAt).AsNoTracking().ToListAsync());
         }
@@ -84,17 +95,27 @@ namespace LostStuffs.Controllers
                 {
                     return HttpNotFound();
                 }
+            if (user.Id== lostStuff.UserId)
+            {
+                return View(lostStuff);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
 
-                return View(lostStuff);           
+
         }
 
         // GET: LostStuffs/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: LostStuffs/Create       
+        // POST: LostStuffs/Create   
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(LostStuff lostStuff, IEnumerable<HttpPostedFileBase> files, HttpPostedFileBase mainImage)
@@ -104,6 +125,7 @@ namespace LostStuffs.Controllers
                 //create entity
                 lostStuff.CreatedAt = DateTime.Now;
                 lostStuff.UpdatedAt = DateTime.Now;
+                lostStuff.UserId = user.Id;
                 db.LostStuffs.Add(lostStuff);
                 db.SaveChanges();
                
@@ -142,8 +164,7 @@ namespace LostStuffs.Controllers
 
         [HttpGet]
         public ActionResult Edit(int id)
-        {
-
+        {            
             LostStuff entity = db.LostStuffs.Find(id);
 
             //get all images for entity and send to view
@@ -162,8 +183,15 @@ namespace LostStuffs.Controllers
             }
             ViewData["ImagePathList"] = imageFullPathList;
             ViewData["ImageNameList"] = imageNameList;
+            if (user.Id == entity.UserId)
+            {
+                return View(entity);
+            }
+            else
+            {
+                return RedirectToAction("Error",new {controller = "Account" });
+            }
             
-            return View(entity);
         }
 
         [HttpPost]
@@ -204,8 +232,17 @@ namespace LostStuffs.Controllers
             {
                 return HttpNotFound();
             }
+            if (user.Id == lostStuff.UserId)
+            {
+                return View(lostStuff);
+            }
+            else
+            {
+                return RedirectToAction("Error", new { controller = "Account" });
+            }
 
-            return View(lostStuff);
+
+
         }
 
         // POST: LostStuffs/Delete/5
