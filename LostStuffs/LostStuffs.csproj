@@ -287,7 +287,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\UploadedFiles\" />
-    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

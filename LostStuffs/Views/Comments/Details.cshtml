@@ -11,14 +11,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.LostStuff.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LostStuff.Name)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Content)
         </dt>
 
@@ -46,5 +38,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { id = Model.LostStuffId })
 </p>

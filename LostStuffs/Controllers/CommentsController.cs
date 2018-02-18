@@ -66,7 +66,7 @@ namespace LostStuffs.Controllers
                 LostStuffId = id
             };
 
-            if (user.Id == entity.UserId)
+            if (user != null)
             {
 
                 return View(entity);
@@ -102,12 +102,13 @@ namespace LostStuffs.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Comment comment = db.Comments.Find(id);
             if (comment == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.LostStuffId = new SelectList(db.LostStuffs, "Id", "Name", comment.LostStuffId);
+
             if (user.Id == comment.UserId)
             {
                 return View(comment);
@@ -120,19 +121,19 @@ namespace LostStuffs.Controllers
         }
 
         // POST: Comments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Content,LostStuffId,CreatedAt,UpdatedAt")] Comment comment)
+        public ActionResult Edit(Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.UpdatedAt = DateTime.Now;
+
                 db.Entry(comment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index/"+comment.LostStuffId);
             }
-            ViewBag.LostStuffId = new SelectList(db.LostStuffs, "Id", "Name", comment.LostStuffId);
+
             if (user.Id == comment.UserId)
             {
                 return View(comment);
@@ -175,7 +176,7 @@ namespace LostStuffs.Controllers
             {
                 db.Comments.Remove(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index/"+comment.LostStuffId);
             }
             else
             {
