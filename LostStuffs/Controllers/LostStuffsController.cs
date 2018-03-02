@@ -137,23 +137,45 @@ namespace LostStuffs.Controllers
                 }
 
                 //save main image
-                lostStuff.ImageName = mainImage.FileName;
-                lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/" + mainImage.FileName;
-                db.SaveChanges();
-                var mainFileName = Path.GetFileName(mainImage.FileName);
-                var path = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/";
-                mainImage.SaveAs(Server.MapPath(path + mainFileName));
-
-                //save other images
-                foreach (var file in files)
-                {   
-                    //lostStuff.ImageName = file.FileName;
-                    //lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/" + file.FileName;
-                    //db.SaveChanges();
-                    var fileName = Path.GetFileName(file.FileName);
-                    //var path = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/";
-                    file.SaveAs(Server.MapPath(path + fileName));
+                if (mainImage==null)
+                {
+                    lostStuff.ImageName = "Default";
+                    lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/Default.jpg";
+                    db.SaveChanges();
                 }
+                else
+                {
+                    lostStuff.ImageName = mainImage.FileName;
+                    lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/" + mainImage.FileName;
+                    db.SaveChanges();
+                    var mainFileName = Path.GetFileName(mainImage.FileName);
+                    var path = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/";
+                    mainImage.SaveAs(Server.MapPath(path + mainFileName));
+                }
+
+                var otherImagespath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/";
+                //save other images
+              
+                    foreach (var file in files)
+                    {
+                    if (file !=null)
+                    {
+                        //lostStuff.ImageName = file.FileName;
+                        //lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/" + file.FileName;
+                        //db.SaveChanges();
+                        var fileName = Path.GetFileName(file.FileName);
+                        //var path = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/";
+                        file.SaveAs(Server.MapPath(otherImagespath + fileName));
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                        
+                    }
+                
+            
+                
 
                 return RedirectToAction("Index");
             }
