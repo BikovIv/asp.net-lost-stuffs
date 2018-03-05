@@ -3,14 +3,15 @@
 @{
     ViewBag.Title = "Details";
     var listImagePath = (List<string>)ViewData["ImagePathList"]; // Cast the list
+    var allComments = (List<LostStuffs.Entities.Comment>)ViewData["AllComments"];
+    var userId = (string)ViewData["CurrentUserId"];
 }
-}
+
 
 <h2>Details</h2>
 
 <div>
-    <h4>LostStuff</h4>
-    @Html.ActionLink("Add comment", "Create", new { controller = "Comments", id = Model.Id })
+    
     <hr />
     <dl class="dl-horizontal">
 
@@ -66,7 +67,43 @@
 
     
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+
+<p> 
+
+    @{
+        if (userId == Model.UserId)
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <br />
+        }
+    }
+
+   
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<div>
+    <h2 style="border-top:1px solid black ">Comments</h2>
+    @Html.ActionLink("Add comment", "Create", new { controller = "Comments", id = Model.Id })
+    <table style="width:90%">
+        @{
+            foreach (var comment in allComments)
+            {
+                <tr style="border-bottom:1px solid black">
+                    <td>
+                        <label class="pull-left">By: @comment.UserName at: @comment.CreatedAt.ToString("dd.MM HH:mm")</label><br />
+                        <pre>@comment.Content</pre>
+               
+                        @if (userId == comment.UserId)
+                        {
+                            <p class="pull-right">
+                                <a href="/Comments/Details/@comment.Id" class="btn btn-info">Details</a>
+                                <a href="/Comments/Edit/@comment.Id" class="btn btn-info">Edit</a>
+                                <a href="/Comments/Delete/@comment.Id" class="btn btn-info">Delete</a>
+                            </p>
+                        }                     
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

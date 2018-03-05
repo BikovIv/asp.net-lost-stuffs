@@ -86,11 +86,13 @@ namespace LostStuffs.Controllers
             entity.LostStuffId = id;
             entity.UserId = user.Id;
 
+            entity.UserName = user.UserName;
+
             db.Comments.Add(entity);
             db.Entry(entity).State = EntityState.Added;
             db.SaveChanges();
 
-            return RedirectToAction("Index/" + entity.LostStuffId);
+            return RedirectToAction("Details/" + id, new { controller = "LostStuffs" });
         }
 
 
@@ -131,7 +133,8 @@ namespace LostStuffs.Controllers
 
                 db.Entry(comment).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index/"+comment.LostStuffId);
+                //return RedirectToAction("Index/"+comment.LostStuffId);
+                return RedirectToAction("Details/"+comment.LostStuffId,new {controller = "LostStuffs" });
             }
 
             if (user.Id == comment.UserId)
@@ -176,7 +179,8 @@ namespace LostStuffs.Controllers
             {
                 db.Comments.Remove(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index/"+comment.LostStuffId);
+                return RedirectToAction("Details/" + comment.LostStuffId, new { controller = "LostStuffs" });
+             
             }
             else
             {

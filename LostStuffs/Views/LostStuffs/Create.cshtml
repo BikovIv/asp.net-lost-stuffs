@@ -58,10 +58,10 @@
                     <form action="" method="post" enctype="multipart/form-data">
 
                         <label for="file1">Main image:</label>
-                        <input type="file" name="mainImage" id="file1" />
+                        <input type="file" name="mainImage" id="file1" accept="image/*" onchange="mainValidation()"/>
 
                         <label for="file2">Image:</label>
-                        <input type="file" name="files" id="file2" />
+                        <input type="file" name="files" id="file2" accept="image/*" onchange="validation()" />
 
                     </form>
                   
@@ -84,3 +84,45 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+
+    <script type="text/javascript">
+        function mainValidation() {
+
+            var fname = (document.getElementById('file1').value).substring(12);
+            var fname1 = (document.getElementById('file2').value).substring(12);
+
+            var reg = /(.jpg|.jpeg|.png|.bmp)$/;
+                
+            if (reg.exec(fname)) {
+
+                document.getElementById('file1').value = (document.getElementById('file1').value).substring(12);
+            }
+
+            else
+            {
+                alert("file not supported!");
+                document.getElementById('file1').value = null;
+            }
+
+        }
+
+        function validation() {
+           
+            var fname = (document.getElementById('file2').value).substring(12);
+            var reg = /(.jpg|.jpeg|.png|.bmp)$/;
+
+            if (reg.exec(fname)) {
+
+                document.getElementById('file2').value = (document.getElementById('file2').value).substring(12);
+            }
+
+            else {
+                alert("file not supported!");
+                document.getElementById('file2').value = null;
+            }
+
+        }
+
+    </script>

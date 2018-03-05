@@ -64,7 +64,9 @@ namespace LostStuffs.Controllers
             if (user != null)
             {
                 ViewData["CurrentUserId"] = user.Id;
+
             }
+
            
 
             return View(await items.OrderByDescending(x => x.CreatedAt).AsNoTracking().ToListAsync());
@@ -72,7 +74,17 @@ namespace LostStuffs.Controllers
         
         public ActionResult Details(int? id)
         {
+            LostStuff lostStuff = db.LostStuffs.Find(id);
             string directoryPath =Server.MapPath("~/Content/UploadedFiles/" + id + "/");
+
+            //get all comments for an ad and send them to view
+            List<Comment> allComments = new List<Comment>();
+            allComments.AddRange(db.Comments.Where(x => x.LostStuffId == id));
+            ViewData["AllComments"] = allComments;
+
+            //get user name an send it do wiev
+            
+             
 
             List<string> imageNamesList = new List<string>();
 
@@ -89,21 +101,26 @@ namespace LostStuffs.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
 
-                LostStuff lostStuff = db.LostStuffs.Find(id);
+
 
                 if (lostStuff == null)
                 {
                     return HttpNotFound();
                 }
-            if (user.Id== lostStuff.UserId)
+            if (user != null)
             {
-                return View(lostStuff);
-            }
-            else
-            {
-                return RedirectToAction("Error", new { controller = "Account" });
+                ViewData["CurrentUserId"] = user.Id;
             }
 
+            //if (user.Id== lostStuff.UserId)
+            //{
+            //    return View(lostStuff);
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Error", new { controller = "Account" });
+            //}
+            return View(lostStuff);
 
         }
 
@@ -126,6 +143,8 @@ namespace LostStuffs.Controllers
                 lostStuff.CreatedAt = DateTime.Now;
                 lostStuff.UpdatedAt = DateTime.Now;
                 lostStuff.UserId = user.Id;
+                lostStuff.UserName = user.UserName;
+                
                 db.LostStuffs.Add(lostStuff);
                 db.SaveChanges();
                
@@ -139,8 +158,9 @@ namespace LostStuffs.Controllers
                 //save main image
                 if (mainImage==null)
                 {
-                    lostStuff.ImageName = "Default";
-                    lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/Default.jpg";
+                    lostStuff.ImageName = "default.jpg";
+                    //lostStuff.ImagePath = "~/Content/UploadedFiles/" + lostStuff.Id.ToString() + "/Default.jpg";
+                    lostStuff.ImagePath = "~/Content/UploadedFiles/default.jpg";
                     db.SaveChanges();
                 }
                 else
@@ -262,9 +282,6 @@ namespace LostStuffs.Controllers
             {
                 return RedirectToAction("Error", new { controller = "Account" });
             }
-
-
-
         }
 
         // POST: LostStuffs/Delete/5

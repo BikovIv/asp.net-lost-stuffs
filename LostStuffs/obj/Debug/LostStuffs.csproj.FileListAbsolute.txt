@@ -240,3 +240,5 @@ H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\obj\Debug\LostStuffs.csproj.G
 H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\obj\Debug\LostStuffs.csproj.CoreCompileInputs.cache
 H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\obj\Debug\LostStuffs.dll
 H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\obj\Debug\LostStuffs.pdb
+H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\bin\ImageResizer.dll
+H:\Repos\LostStuffs\asp.net-lost-stuffs\LostStuffs\bin\ImageResizer.xml

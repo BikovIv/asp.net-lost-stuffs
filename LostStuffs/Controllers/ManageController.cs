@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LostStuffs.Models;
+using System.Collections.Generic;
+using LostStuffs.Entities;
 
 namespace LostStuffs.Controllers
 {
@@ -15,6 +17,7 @@ namespace LostStuffs.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public ManageController()
         {
@@ -72,6 +75,12 @@ namespace LostStuffs.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
+           
+            List<LostStuff> allPosts = new List<LostStuff>();
+            allPosts.AddRange(db.LostStuffs.Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt));
+            // return View(allPosts.OrderByDescending(x => x.CreatedAt));
+            ViewData["MyAdsList"] = allPosts;
             return View(model);
         }
 
@@ -333,7 +342,12 @@ namespace LostStuffs.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        public void GetMyAds()
+        {
+          
+        }
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
